@@ -7,4 +7,8 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="color_primary">#706233</color>
+    <color name="color_secondary">#B0926A</color>
+    <color name="color_third">#E1C78F</color>
+    <color name="color_forth">#FAE7C9</color> <!--https://colorhunt.co/palette/706233b0926ae1c78ffae7c9-->
 </resources>

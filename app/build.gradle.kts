@@ -66,17 +66,18 @@ dependencies {
     implementation("com.squareup.okhttp3:okhttp:$squareupOkhttp3Version")
     implementation("com.squareup.okhttp3:logging-interceptor:$squareupOkhttp3Version")
 
-    // Paging
-    val paging_version = "3.2.1"
-    implementation("androidx.paging:paging-compose:$paging_version")
-    // Coil
-    val coil_version = "2.5.0"
-    implementation("io.coil-kt:coil-compose:$coil_version")
 
-    val compose_version = "1.5.4"
-    implementation ("androidx.compose.runtime:runtime-livedata:$compose_version")
+    // Coil
+    val coilVersion = "2.5.0"
+    implementation("io.coil-kt:coil-compose:$coilVersion")
+
+    val composeVersion = "1.5.4"
+    implementation ("androidx.compose.runtime:runtime-livedata:$composeVersion")
     //implementation("androidx.compose.runtime:runtime-livedata:1.5.4")
     //implementation("androidx.compose.runtime:runtime-rxjava2:1.5.4")
+
+    val navVersion = "2.7.5"
+    implementation("androidx.navigation:navigation-compose:$navVersion") //nav
 
     implementation("androidx.core:core-ktx:1.9.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")

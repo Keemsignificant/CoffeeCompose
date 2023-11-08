@@ -10,7 +10,6 @@ import kotlinx.coroutines.launch
 class HomeViewModel: ViewModel() {
 
     var menuCoffeeResult = MutableLiveData<List<CoffeeDTO>>().apply { value = listOf() }
-
     fun getMenuCoffee() {
         viewModelScope.launch {
             val result =  CoffeeRepositoryImpl().getAllCoffee()

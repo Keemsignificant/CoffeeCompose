@@ -11,6 +11,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
@@ -33,9 +34,9 @@ import com.chirayut.coffecompose.model.CoffeeDTO
 fun RenderCard(coffee: CoffeeDTO, modifier: Modifier) {
     Surface(
         shape = RoundedCornerShape(8.dp),
-        modifier = modifier,
+        modifier = modifier.fillMaxWidth(),
         shadowElevation = 8.dp,
-        color = colorResource(id = R.color.teal_200)//Color.Green //cardBackgroundColor
+        color = colorResource(id = R.color.color_secondary)//Color.Green //cardBackgroundColor
     ) {
         Column {
 
@@ -78,7 +79,8 @@ fun CategoryImageFromURLWithPlaceHolder(coffee: CoffeeDTO,  modifier: Modifier?)
         placeholder = painterResource(R.drawable.ic_launcher_background),
         contentDescription = stringResource(R.string.app_name),
         contentScale = ContentScale.Crop,
+        alignment = Alignment.Center,
         error = painterResource(R.drawable.ic_launcher_foreground),
-        modifier = modifier?.height(200.dp) ?:Modifier.fillMaxWidth().height(200.dp),
+        modifier = modifier?.height(200.dp)?.fillMaxWidth() ?:Modifier.fillMaxWidth().height(200.dp),
     )
 }
