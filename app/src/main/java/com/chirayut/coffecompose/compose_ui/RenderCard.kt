@@ -1,6 +1,7 @@
 package com.chirayut.coffecompose.compose_ui
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -31,12 +32,14 @@ import com.chirayut.coffecompose.model.CoffeeDTO
 
 
 @Composable
-fun RenderCard(coffee: CoffeeDTO, modifier: Modifier) {
+fun RenderCard(coffee: CoffeeDTO, modifier: Modifier, onClick: (CoffeeDTO) -> Unit) {
     Surface(
         shape = RoundedCornerShape(8.dp),
-        modifier = modifier.fillMaxWidth(),
+        modifier = modifier.fillMaxWidth().clickable {
+            onClick.invoke(coffee)
+        },
         shadowElevation = 8.dp,
-        color = colorResource(id = R.color.color_secondary)//Color.Green //cardBackgroundColor
+        color = colorResource(id = R.color.color_secondary),//Color.Green //cardBackgroundColor
     ) {
         Column {
 

@@ -25,6 +25,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -34,10 +35,12 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.chirayut.coffecompose.R
+import com.chirayut.coffecompose.home.HomeFragment
+import com.chirayut.coffecompose.model.MenuBar
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CustomBottomNav() {
+fun CustomBottomNav(menuBar: List<MenuBar>, navController: NavController) {
     val navController = rememberNavController()
 
     val navStackBackEntry by navController.currentBackStackEntryAsState()
@@ -54,23 +57,31 @@ fun CustomBottomNav() {
     Scaffold(
         bottomBar = {
             //CustomBottomBar(navController = navController, currentDestination)
-            if (showBottomBar) CustomBottomBar(navController = navController, currentDestination)
+            if (showBottomBar) CustomBottomBar(
+                navController = navController,
+                currentDestination,
+                menuBar
+            )
         }
     ) {
         Modifier.padding(it)
         MainBottomNavGraph(
-            navController = navController
+            navController = navController,
+            menuBar
         )
     }
 }
 
 @Composable
-fun CustomBottomBar(navController: NavHostController, currentDestination: NavDestination?) {
-   // val screens = MenuItemUseCase().getMenuItem()
+fun CustomBottomBar(
+    navController: NavController,
+    currentDestination: NavDestination?,
+    menuBar: List<MenuBar>
+) {
+    val screens = menuBar
 
 
-
-    /*Surface(
+    Surface(
         shape = RoundedCornerShape(8.dp),
         modifier = Modifier
             //.padding(start = 10.dp, end = 10.dp, top = 8.dp, bottom = 8.dp)
@@ -78,7 +89,7 @@ fun CustomBottomBar(navController: NavHostController, currentDestination: NavDes
             //.background(Color.Transparent)
             .fillMaxWidth(),
         shadowElevation = 8.dp,
-        color = colorResource(id = R.color.blue)
+        color = colorResource(id = R.color.color_primary)
     ) {
         Row(
             modifier = Modifier
@@ -97,25 +108,20 @@ fun CustomBottomBar(navController: NavHostController, currentDestination: NavDes
             }
         }
 
-    }*/
+    }
 
 }
 
-/*
 @Composable
 fun CustomAddItem(
-    screen: MenuItem,
+    screen: MenuBar,
     currentDestination: NavDestination?,
-    navController: NavHostController
+    navController: NavController
 ) {
-    val selected = currentDestination?.hierarchy?.any { it.route == screen.route } == true
+    val selected = currentDestination?.hierarchy?.any { it.route == screen.menuRoute } == true
 
     val background =
-        if (selected) */
-/*MaterialTheme.colorScheme.primary.copy(alpha = 0.6f)*//*
- colorResource(id = R.color.blue) else colorResource(
-            id = R.color.blue
-        ) //Color.Transparent
+        if (selected) colorResource(id = R.color.color_primary) else colorResource(id = R.color.color_primary) //Color.Transparent
 
     val contentColor =
         if (selected) Color.White else Color.Black
@@ -126,7 +132,7 @@ fun CustomAddItem(
             //.clip(CircleShape)
             .background(background)
             .clickable(onClick = {
-                navController.navigate(screen.route) {
+                navController.navigate(screen.menuRoute ?: "") {
                     popUpTo(navController.graph.findStartDestination().id)
                     launchSingleTop = true
                 }
@@ -137,39 +143,48 @@ fun CustomAddItem(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Icon(
-                //painter = painterResource(id = if (selected) screen.icon_focused else screen.icon),
-                painter = painterResource(id = if (selected) screen.menuIconFocus else screen.menuIcon),
-                contentDescription = "icon",
-                tint = contentColor
-            )
+
+            /*AsyncImage(
+                model = ImageRequest.Builder(LocalContext.current)
+                    .data(if (selected) screen.menuIconActive else screen.menuIcon)
+                    .crossfade(true)
+                    .build(),
+                placeholder = painterResource(R.drawable.ic_launcher_background),
+                contentDescription = stringResource(R.string.app_name),
+                contentScale = ContentScale.Crop,
+                error = painterResource(R.drawable.ic_launcher_foreground),
+                modifier = Modifier.width(50.dp).height(50.dp),
+            )*/
+            Icon(painter = painterResource(id = R.drawable.baseline_restaurant_menu_24), contentDescription = null,
+                /*modifier = Modifier.width(40.dp).height(40.dp),*/)
+
             Text(
-                text = screen.menuTile,
+                text = screen.menuBar ?: "Empty",
                 color = contentColor
             )
         }
     }
 }
-*/
 
 @Composable
 fun MainBottomNavGraph(
-    navController: NavHostController
+    navController: NavController,
+    menuBar: List<MenuBar>
 ) {
 
-    /*val allMenu = MenuItemUseCase().getMenuItem()
     NavHost(
-        navController = navController,
-        startDestination = allMenu[0].route
+        navController = navController as NavHostController,
+        startDestination = menuBar[0].menuRoute ?: ""
     ) {
-        composable(route = allMenu[0].route) {
-            MainScreen(navController = navController)
+        composable(route = menuBar[0].menuRoute ?: "") {
+            //MainScreen(navController = navController)
+            HomeFragment()
         }
-        composable(route = allMenu[1].route) {
-            ListScreen()
+        composable(route = menuBar[1].menuRoute ?: "") {
+            //ListScreen()
         }
-        composable(route = allMenu[2].route) {
-            SettingScreen()
+        composable(route = menuBar[2].menuRoute ?: "") {
+            //SettingScreen()
         }
-    }*/
+    }
 }

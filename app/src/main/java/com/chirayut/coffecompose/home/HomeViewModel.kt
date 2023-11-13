@@ -1,4 +1,4 @@
-package com.chirayut.coffecompose.main
+package com.chirayut.coffecompose.home
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel

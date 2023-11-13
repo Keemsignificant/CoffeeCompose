@@ -11,6 +11,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -36,6 +37,14 @@ fun SplashScreenFragment(
     viewModel: SplashScreenViewModel = viewModel(),
 ) {
 
+    fun launch() {
+        viewModel.checkAppStatus()
+    }
+
+    launch()
+
+    val checkAppResult = viewModel.checkAppResult.observeAsState().value
+
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = colorResource(id = R.color.color_secondary)
@@ -51,7 +60,11 @@ fun SplashScreenFragment(
         )
     }
 
-    navigateToHostScreen()
+    if (checkAppResult.isNullOrEmpty()){
+
+    }else{
+        navigateToHostScreen()
+    }
 
 }
 

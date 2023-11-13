@@ -1,12 +1,16 @@
-package com.chirayut.coffecompose.main
+package com.chirayut.coffecompose.home
 
-import androidx.compose.material3.Surface
+import android.annotation.SuppressLint
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.chirayut.coffecompose.compose_ui.renderList
 import com.chirayut.coffecompose.model.CoffeeDTO
 
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeFragment(
     homeViewModel: HomeViewModel = viewModel()
@@ -19,14 +23,12 @@ fun HomeFragment(
 
     launch()
 
-    val list2 = homeViewModel.menuCoffeeResult.observeAsState().value
+    val coffeeMenuList = homeViewModel.menuCoffeeResult.observeAsState().value
 
-    Surface(
-
-    ) {
-        if (list2?.isNotEmpty() == true) {
+    Scaffold {
+        if (coffeeMenuList?.isNotEmpty() == true) {
             HomeScreen(
-                menuCoffeeResult = list2
+                menuCoffeeResult = coffeeMenuList
             )
         }
     }

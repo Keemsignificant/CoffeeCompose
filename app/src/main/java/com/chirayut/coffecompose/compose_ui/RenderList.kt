@@ -14,16 +14,13 @@ import com.chirayut.coffecompose.model.CoffeeDTO
 fun renderList(coffee: List<CoffeeDTO>, onClick: (CoffeeDTO) -> Unit) {
     LazyColumn {
         items(coffee) {
-            //Text(text = it)
-            Surface(modifier = Modifier.clickable {
-                onClick(it)
-            }) {
-                RenderCard(
-                    coffee = it,
-                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
-                )
-
-            }
+            RenderCard(
+                coffee = it,
+                modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+                onClick = {
+                    onClick(it)
+                }
+            )
         }
     }
 }
