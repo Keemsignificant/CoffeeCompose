@@ -8,4 +8,5 @@ interface CoffeeRepository {
     suspend fun getAllCoffee(): List<CoffeeDTO>
     suspend fun checkAppStatus(): List<AppStatus>
     suspend fun getCoffeeMenuBar(): List<MenuBar>
+    suspend fun getCoffeeMenuDetailById(id: String?): CoffeeDTO
 }

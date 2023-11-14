@@ -4,11 +4,13 @@ import com.google.gson.annotations.SerializedName
 
 data class CoffeeDTO(
     @SerializedName("id")
-    val menuId: String?,
+    val menuId: String? = null,
     @SerializedName("menu_name")
-    val menuName: String?,
+    val menuName: String? = null,
     @SerializedName("menu_desc")
-    val menuDesc: String?,
+    val menuDesc: String? = null,
     @SerializedName("menu_pic")
-    val menuPic: String?
+    val menuPic: String? = null,
+    @SerializedName("menu_detail_pic_list")
+    val menuDetailPicList: List<String?> = listOf()
 )

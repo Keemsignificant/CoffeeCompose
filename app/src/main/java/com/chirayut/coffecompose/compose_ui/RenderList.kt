@@ -11,14 +11,20 @@ import androidx.compose.ui.unit.dp
 import com.chirayut.coffecompose.model.CoffeeDTO
 
 @Composable
-fun renderList(coffee: List<CoffeeDTO>, onClick: (CoffeeDTO) -> Unit) {
+fun renderList(
+    coffee: List<CoffeeDTO>, onClickItemDetail: (CoffeeDTO) -> Unit,
+    onAddOrder: (CoffeeDTO) -> Unit
+) {
     LazyColumn {
         items(coffee) {
             RenderCard(
                 coffee = it,
                 modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
-                onClick = {
-                    onClick(it)
+                onClickItemDetail = { coffeeItem ->
+                    onClickItemDetail(coffeeItem)
+                },
+                onAddOrder = { coffeeItem ->
+                    onAddOrder(coffeeItem)
                 }
             )
         }

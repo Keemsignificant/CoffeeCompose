@@ -3,6 +3,7 @@ package com.chirayut.coffecompose.compose_ui
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -27,44 +28,49 @@ import coil.compose.AsyncImage
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import com.chirayut.coffecompose.R
-import com.chirayut.coffecompose.model.Coffee
+import com.chirayut.coffecompose.home.HomeScreen
 import com.chirayut.coffecompose.model.CoffeeDTO
+import com.chirayut.coffecompose.ui.theme.CoffeeComposeTheme
 
 
 @Composable
-fun RenderCard(coffee: CoffeeDTO, modifier: Modifier, onClick: (CoffeeDTO) -> Unit) {
+fun RenderCard(coffee: CoffeeDTO, modifier: Modifier, onClickItemDetail: (CoffeeDTO) -> Unit, onAddOrder: (CoffeeDTO) -> Unit) {
     Surface(
         shape = RoundedCornerShape(8.dp),
-        modifier = modifier.fillMaxWidth().clickable {
-            onClick.invoke(coffee)
-        },
+        modifier = modifier
+            .fillMaxWidth()
+            .clickable {
+                onClickItemDetail.invoke(coffee)
+            },
         shadowElevation = 8.dp,
         color = colorResource(id = R.color.color_secondary),//Color.Green //cardBackgroundColor
     ) {
         Column {
 
-            /*Image(
-                painter = rememberAsyncImagePainter(user.userImageUrl),
-                contentDescription = null,
-                contentScale = ContentScale.FillWidth,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(200.dp)
-            )*/
             CategoryImageFromURLWithPlaceHolder(coffee, modifier)
 
-            /* Image(
-                 painter = painterResource(id = R.drawable.ic_launcher_foreground),
-                 contentDescription = "Desc",
-                 contentScale = ContentScale.Crop,
-                 modifier = Modifier.fillMaxWidth()
-             )*/
+            Row(modifier = Modifier.padding(16.dp)) {
 
-            Column(modifier = Modifier.padding(16.dp)) {
-                Text(
-                    text = coffee.menuName ?: "",
-                    style = MaterialTheme.typography.titleMedium
+                Column(modifier = Modifier.weight(8f)) {
+                    Text(
+                        text = coffee.menuName ?: "",
+                        style = MaterialTheme.typography.titleMedium
+                    )
+
+                    Text(
+                        text = coffee.menuDesc ?: "",
+                        style = MaterialTheme.typography.titleSmall
+                    )
+                }
+
+                Image(
+                    painter = painterResource(id = R.drawable.baseline_restaurant_menu_24),
+                    contentDescription = null,
+                    modifier = Modifier.weight(2f).clickable {
+                        onAddOrder.invoke(coffee)
+                    }
                 )
+
             }
         }
 
@@ -73,7 +79,7 @@ fun RenderCard(coffee: CoffeeDTO, modifier: Modifier, onClick: (CoffeeDTO) -> Un
 
 
 @Composable
-fun CategoryImageFromURLWithPlaceHolder(coffee: CoffeeDTO,  modifier: Modifier?){
+fun CategoryImageFromURLWithPlaceHolder(coffee: CoffeeDTO, modifier: Modifier?) {
     AsyncImage(
         model = ImageRequest.Builder(LocalContext.current)
             .data(coffee.menuPic)
@@ -84,6 +90,20 @@ fun CategoryImageFromURLWithPlaceHolder(coffee: CoffeeDTO,  modifier: Modifier?)
         contentScale = ContentScale.Crop,
         alignment = Alignment.Center,
         error = painterResource(R.drawable.ic_launcher_foreground),
-        modifier = modifier?.height(200.dp)?.fillMaxWidth() ?:Modifier.fillMaxWidth().height(200.dp),
+        modifier = modifier?.height(200.dp)?.fillMaxWidth() ?: Modifier
+            .fillMaxWidth()
+            .height(200.dp),
     )
+}
+
+@Preview(showBackground = true)
+@Composable
+fun GreetingPreview() {
+    CoffeeComposeTheme {
+        /*RenderCard(
+            CoffeeDTO(menuId = null, menuName = "null", menuDesc = "Desc", menuPic = null),
+            modifier = Modifier.padding(16.dp),
+            onClickItemDetail = {},
+            onAddOrder = {})*/
+    }
 }

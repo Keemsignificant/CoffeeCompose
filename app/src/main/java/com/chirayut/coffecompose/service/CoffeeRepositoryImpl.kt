@@ -90,4 +90,21 @@ class CoffeeRepositoryImpl : CoffeeRepository {
             emptyList()
         }
     }
+
+    override suspend fun getCoffeeMenuDetailById(id: String?): CoffeeDTO {
+        return try {
+            val response = apiService.getCoffeeMenuById(id).awaitResponse()
+            if (response.isSuccessful) {
+                //val countries = response.body() ?: emptyList()
+                //countries.map { t.toModel() }
+                (response.body() ?:  CoffeeDTO())
+            } else {
+                CoffeeDTO()
+            }
+
+        } catch (exception: Exception) {
+            val e = exception
+            CoffeeDTO()
+        }
+    }
 }

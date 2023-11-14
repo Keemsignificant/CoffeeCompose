@@ -30,11 +30,14 @@ import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.chirayut.coffecompose.R
+import com.chirayut.coffecompose.detail.DetailFragment
 import com.chirayut.coffecompose.home.HomeFragment
 import com.chirayut.coffecompose.model.MenuBar
 
@@ -155,8 +158,11 @@ fun CustomAddItem(
                 error = painterResource(R.drawable.ic_launcher_foreground),
                 modifier = Modifier.width(50.dp).height(50.dp),
             )*/
-            Icon(painter = painterResource(id = R.drawable.baseline_restaurant_menu_24), contentDescription = null,
-                /*modifier = Modifier.width(40.dp).height(40.dp),*/)
+            Icon(
+                painter = painterResource(id = R.drawable.baseline_restaurant_menu_24),
+                contentDescription = null,
+                /*modifier = Modifier.width(40.dp).height(40.dp),*/
+            )
 
             Text(
                 text = screen.menuBar ?: "Empty",
@@ -178,13 +184,24 @@ fun MainBottomNavGraph(
     ) {
         composable(route = menuBar[0].menuRoute ?: "") {
             //MainScreen(navController = navController)
-            HomeFragment()
+            HomeFragment(navController)
         }
         composable(route = menuBar[1].menuRoute ?: "") {
-            //ListScreen()
         }
         composable(route = menuBar[2].menuRoute ?: "") {
-            //SettingScreen()
         }
+        /*composable(route = "DetailFragment") {
+            DetailFragment(navController)
+        }*/
+        composable(
+            "DetailFragment/{menuId}",
+            arguments = listOf(navArgument("menuId") { type = NavType.StringType })
+        ) { backStackEntry ->
+            DetailFragment(
+                backStackEntry.arguments?.getString("menuId"),
+                navController = navController
+            )
+        }
+
     }
 }

@@ -5,6 +5,7 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.chirayut.coffecompose.compose_ui.CustomBottomNav
+import com.chirayut.coffecompose.home.renderTopBar
 
 @Composable
 fun HostFragment(

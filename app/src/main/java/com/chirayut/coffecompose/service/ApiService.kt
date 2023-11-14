@@ -6,6 +6,7 @@ import com.chirayut.coffecompose.model.MenuBar
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.Path
 
 interface ApiService {
     @GET("getCoffeeMenu")
@@ -16,4 +17,7 @@ interface ApiService {
 
     @GET("getCoffeeMenuBar")
     fun getCoffeeMenuBar(): Call<List<MenuBar>>
+
+    @GET("getCoffeeMenuByID/{id}")
+    fun getCoffeeMenuById(@Path("id") id: String?): Call<CoffeeDTO>
 }
