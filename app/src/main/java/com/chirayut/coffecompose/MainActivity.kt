@@ -25,6 +25,7 @@ class MainActivity : ComponentActivity() {
                     //color = MaterialTheme.colorScheme.background
                 ) {
                     SplashScreenFragment()
+                    //https://developer.android.com/jetpack/compose/side-effects
                 }
             }
 

@@ -1,6 +1,5 @@
 package com.chirayut.coffecompose.splash
 
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
