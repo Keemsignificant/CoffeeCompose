@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
@@ -87,6 +88,22 @@ fun RenderCard(
                     )
 
                 }
+
+                /*LazyColumn{
+                    items(10) { index ->
+                        Text(text = "Item$index")
+                    }
+                }*/
+
+                /*for(i in 1..10){
+                    Text(text = "Item$i")
+                }
+
+                Row {
+                    for(i in 1..15){
+                        Text(text = "ItemRow$i")
+                    }
+                }*/
             }
 
         }

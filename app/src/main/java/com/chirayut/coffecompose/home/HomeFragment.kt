@@ -57,6 +57,7 @@ import com.chirayut.coffecompose.compose_ui.renderList
 import com.chirayut.coffecompose.model.CoffeeDTO
 import com.chirayut.coffecompose.ui.theme.CoffeeComposeTheme
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
@@ -65,7 +66,6 @@ fun HomeFragment(
     navController: NavController,
     homeViewModel: HomeViewModel = viewModel()
 ) {
-
 
 
     fun launch() {
@@ -84,8 +84,9 @@ fun HomeFragment(
     val coroutineScope = rememberCoroutineScope()
 
 
+    val isShowViewLoadMoreItemState = remember { mutableStateOf(false)}
     coffeeMenuList?.let {
-        if (coffeeListHandle.isEmpty()){
+        if (coffeeListHandle.isEmpty()) {
             coffeeListHandle.addAll(it)
         }
     }
@@ -95,7 +96,6 @@ fun HomeFragment(
         delay(2000)
         isLoading = false
     }
-
 
     Scaffold {
         if (coffeeMenuList?.isNotEmpty() == true) {
@@ -120,13 +120,20 @@ fun HomeFragment(
                     },
                     isLoading = isLoading,
                     onLoadMoreItems = {
-                        if (coffeeListHandle.isNotEmpty() && !isLoading) {
+                        if (coffeeListHandle.isNotEmpty() && !isLoading && !isShowViewLoadMoreItemState.value) {
                             val conditionIsNotLastPage = coffeeListHandle.size < 10
                             if (conditionIsNotLastPage) {
                                 addItemMenu(coffeeListHandle)
+                                coroutineScope.launch {
+                                    isShowViewLoadMoreItemState.value = true
+                                    delay(2000)
+                                    isShowViewLoadMoreItemState.value = false
+                                }
                             }
                         }
-                    }
+                    },
+                    homeViewModel = homeViewModel,
+                    isShowViewLoadMoreItemState = isShowViewLoadMoreItemState.value
                 )
             }
 
@@ -156,7 +163,9 @@ fun HomeScreen(
     onClickItemDetail: (CoffeeDTO) -> Unit,
     onAddOrder: (CoffeeDTO) -> Unit,
     isLoading: Boolean,
-    onLoadMoreItems: () -> Unit
+    onLoadMoreItems: () -> Unit,
+    homeViewModel: HomeViewModel = viewModel(),
+    isShowViewLoadMoreItemState:Boolean
 ) {
 
     Column {
@@ -167,7 +176,9 @@ fun HomeScreen(
             onClickItemDetail,
             onAddOrder,
             isLoading,
-            onLoadMoreItems
+            onLoadMoreItems,
+            homeViewModel,
+            isShowViewLoadMoreItemState
         )
     }
 
@@ -230,9 +241,23 @@ fun itemLoadingCoffeeList(
     onAddOrder: (CoffeeDTO) -> Unit,
     isLoading: Boolean,
     onLoadMoreItemsCallback: () -> Unit,
+    homeViewModel: HomeViewModel,
+    isShowViewLoadMoreItemState: Boolean
 ) {
     val listState = rememberLazyListState()
     val coroutineScope = rememberCoroutineScope()
+
+    val isLoadingItem = homeViewModel.isLoadingItem.observeAsState().value
+
+
+    coroutineScope.launch {
+        delay(3000)
+        homeViewModel.isLoadingItem.value = false
+    }
+
+    val modifier = Modifier
+        .fillMaxWidth()
+        .padding(horizontal = 16.dp, vertical = 8.dp)
 
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
@@ -246,32 +271,81 @@ fun itemLoadingCoffeeList(
                 onLoadMoreItemsCallback.invoke()
             }
 
-            val modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 8.dp)
 
-            if (isLoading) {
-                renderCardLoading(modifier = modifier)
-            } else {
-                if (index % 2 == 0) {
-                    renderCard(
-                        menuCoffeeResult,
-                        index,
-                        onClickItemDetail,
-                        onAddOrder,
-                        R.color.color_secondary
-                    )
-                } else {
-                    renderCard(
-                        menuCoffeeResult,
-                        index,
-                        onClickItemDetail,
-                        onAddOrder,
-                        R.color.color_forth
-                    )
-                }
+            renderCardCondition(
+                isShowLoad = isLoading,
+                modifier = modifier,
+                menuCoffeeResult = menuCoffeeResult,
+                onClickItemDetail = {
+                    onClickItemDetail.invoke(it)
+                },
+                onAddOrder = {
+
+                },
+                index = index
+            )
+        }
+
+        if (isShowViewLoadMoreItemState){
+            items(2){
+                renderCardCondition(
+                    isShowLoad = true,
+                    modifier = modifier,
+                    menuCoffeeResult = menuCoffeeResult,
+                    onClickItemDetail = {
+                        onClickItemDetail.invoke(it)
+                    },
+                    onAddOrder = {
+
+                    },
+                    index = it
+                )
             }
         }
+
+
+    }
+}
+
+
+@Composable
+fun renderCardCondition(
+    isShowLoad: Boolean, modifier: Modifier,
+    menuCoffeeResult: List<CoffeeDTO>,
+    onClickItemDetail: (CoffeeDTO) -> Unit,
+    onAddOrder: (CoffeeDTO) -> Unit,
+    index: Int
+) {
+
+    Column {
+        /* if (isShowLoad) {
+             renderCardLoading(modifier = modifier.alpha(1f))
+             renderCard(
+                 menuCoffeeResult = menuCoffeeResult,
+                 index = index,
+                 onClickItemDetail = onClickItemDetail,
+                 onAddOrder = onAddOrder,
+                 modifier = modifier.alpha(0f)
+             )
+         } else {
+             renderCardLoading(modifier = modifier.alpha(0f))
+             renderCard(
+                 menuCoffeeResult = menuCoffeeResult,
+                 index = index,
+                 onClickItemDetail = onClickItemDetail,
+                 onAddOrder = onAddOrder,
+                 modifier = modifier.alpha(1f)
+             )
+         }*/
+        renderCardLoading(modifier = modifier, isVisible = isShowLoad)
+        renderCard(
+            menuCoffeeResult = menuCoffeeResult,
+            index = index,
+            onClickItemDetail = onClickItemDetail,
+            onAddOrder = onAddOrder,
+            modifier = modifier, isVisible = !isShowLoad
+        )
+
     }
 }
 
@@ -281,18 +355,21 @@ fun renderCard(
     index: Int,
     onClickItemDetail: (CoffeeDTO) -> Unit,
     onAddOrder: (CoffeeDTO) -> Unit,
-    idBgCardRes: Int = R.color.color_secondary
+    idBgCardRes: Int = R.color.color_secondary,
+    modifier: Modifier,
+    isVisible: Boolean = true
 ) {
     RenderCard(
         coffee = menuCoffeeResult[index],
-        modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+        modifier = modifier,
         onClickItemDetail = { coffeeItem ->
             onClickItemDetail(coffeeItem)
         },
         onAddOrder = { coffeeItem ->
             onAddOrder(coffeeItem)
         },
-        idBgCardRes = idBgCardRes
+        idBgCardRes = idBgCardRes,
+        isVisible = isVisible
     )
 }
 
