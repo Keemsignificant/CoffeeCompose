@@ -214,6 +214,24 @@ fun CategoryImageFromURLWithPlaceHolder(coffee: CoffeeDTO, modifier: Modifier?) 
 }
 
 
+@Composable
+fun RenderImageUrl(path: String?, modifier:Modifier?){
+    AsyncImage(
+        model = ImageRequest.Builder(LocalContext.current)
+            .data(path)
+            .crossfade(true)
+            .build(),
+        placeholder = painterResource(R.drawable.ic_launcher_background),
+        contentDescription = stringResource(R.string.app_name),
+        contentScale = ContentScale.Crop,
+        alignment = Alignment.Center,
+        error = painterResource(R.drawable.ic_launcher_foreground),
+        modifier = modifier?.height(200.dp)?.fillMaxWidth() ?: Modifier
+            .fillMaxWidth()
+            .height(200.dp),
+    )
+}
+
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {

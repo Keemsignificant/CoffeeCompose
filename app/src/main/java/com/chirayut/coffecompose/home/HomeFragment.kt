@@ -77,7 +77,7 @@ fun HomeFragment(
     val coroutineScope = rememberCoroutineScope()
 
 
-    val isShowViewLoadMoreItemState = remember { mutableStateOf(false)}
+    val isShowViewLoadMoreItemState = remember { mutableStateOf(false) }
     coffeeMenuList?.let {
         if (coffeeListHandle.isEmpty()) {
             coffeeListHandle.addAll(it)
@@ -158,7 +158,7 @@ fun HomeScreen(
     isLoading: Boolean,
     onLoadMoreItems: () -> Unit,
     homeViewModel: HomeViewModel = viewModel(),
-    isShowViewLoadMoreItemState:Boolean
+    isShowViewLoadMoreItemState: Boolean
 ) {
 
     Column {
@@ -196,30 +196,33 @@ fun itemCoffeeHandleLoadMore(
 }
 
 @Composable
-fun renderTopBar() {
+fun renderTopBar(title: String = "Mikulo Cafe & Mikulae Bakery", isShowOrderIcon: Boolean = true, topBarBgRes:Int = R.color.white) {
     Surface(
         shape = RoundedCornerShape(8.dp),
         modifier = Modifier
             .fillMaxWidth(),
-        color = colorResource(id = R.color.white)
+        color = colorResource(id = topBarBgRes)
     ) {
         Row(modifier = Modifier.padding(16.dp)) {
             Text(
-                text = "Mikulo Cafe & Mikulae Bakery",
+                text = title,
                 color = colorResource(id = R.color.color_primary),
                 modifier = Modifier
                     .fillMaxWidth()
                     .weight(8f)
             )
 
-            Image(
-                painter = painterResource(id = R.drawable.baseline_restaurant_menu_24),
-                contentDescription = null,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(2f),
-                alignment = Alignment.CenterEnd
-            )
+            if (isShowOrderIcon) {
+                Image(
+                    painter = painterResource(id = R.drawable.baseline_restaurant_menu_24),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(2f),
+                    alignment = Alignment.CenterEnd
+                )
+            }
+
         }
 
     }
@@ -277,8 +280,8 @@ fun itemLoadingCoffeeList(
             )
         }
 
-        if (isShowViewLoadMoreItemState){
-            items(2){
+        if (isShowViewLoadMoreItemState) {
+            items(2) {
                 renderCardCondition(
                     isShowLoad = true,
                     modifier = modifier,
