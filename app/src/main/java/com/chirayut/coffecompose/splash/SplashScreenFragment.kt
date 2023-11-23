@@ -10,10 +10,12 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.colorResource
@@ -26,6 +28,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.chirayut.coffecompose.MainActivity
 import com.chirayut.coffecompose.R
+import com.chirayut.coffecompose.compose_ui.CustomDialog
 import com.chirayut.coffecompose.host.HostFragment
 import com.chirayut.coffecompose.ui.theme.CoffeeComposeTheme
 import kotlinx.coroutines.delay
@@ -43,6 +46,7 @@ fun SplashScreenFragment(
     launch()
 
     val checkAppResult = viewModel.checkAppResult.observeAsState().value
+    //var isShowDialogLoading by remember { mutableStateOf(true) }
 
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -59,9 +63,15 @@ fun SplashScreenFragment(
         )
     }
 
-    if (checkAppResult.isNullOrEmpty()){
-
-    }else{
+    if (checkAppResult.isNullOrEmpty()) {
+        viewModel.isShowDialogLoading.value = true
+        CustomDialog(
+            isShowDialogLoading = viewModel.isShowDialogLoading.value ?: true,
+            onDismissRequest = {
+                viewModel.isShowDialogLoading.value = false
+            })
+    } else {
+        viewModel.isShowDialogLoading.value = false
         navigateToHostScreen()
     }
 

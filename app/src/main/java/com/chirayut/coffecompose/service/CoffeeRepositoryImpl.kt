@@ -62,7 +62,7 @@ class CoffeeRepositoryImpl : CoffeeRepository {
             if (response.isSuccessful) {
                 //val countries = response.body() ?: emptyList()
                 //countries.map { t.toModel() }
-                delay(1500)
+                //delay(1500)
                 (response.body() ?: emptyList())
             } else {
                 emptyList()

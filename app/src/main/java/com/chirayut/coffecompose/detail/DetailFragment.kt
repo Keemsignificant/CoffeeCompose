@@ -1,6 +1,8 @@
 package com.chirayut.coffecompose.detail
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -8,7 +10,10 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.Button
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
@@ -32,28 +37,60 @@ import com.chirayut.coffecompose.home.renderTopBar
 import com.chirayut.coffecompose.ui.theme.CoffeeComposeTheme
 import okhttp3.internal.parseCookie
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DetailFragment(
     idMenu: String?,
     viewModel: DetailViewModel = viewModel(),
     navController: NavController
 ) {
+    viewModel.isLoading.value = true
     viewModel.getCoffeeMenuDetailById(idMenu)
 
     val coffeeMenuList = viewModel.menuCoffeeResult.observeAsState().value
-    Column {
-        renderTopBar()
-        coffeeMenuList?.let { lazyVerticalGrid(it.menuDetailPicList) }
+    Scaffold {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(
+                    bottom = it.calculateBottomPadding()
+                )
+                .padding(bottom = 90.dp) // <<-- or simply this
+        ) {
+            Column {
+                renderTopBar()
+                coffeeMenuList?.let { menuResult -> lazyVerticalGrid(menuResult.menuDetailPicList) }
 
-        Column(modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp)) {
-            Text(text = coffeeMenuList?.menuName ?: "", style = MaterialTheme.typography.titleMedium, color = colorResource(R.color.color_secondary))
-            Text(text = coffeeMenuList?.menuDesc ?: "", style = MaterialTheme.typography.titleSmall, color = colorResource(R.color.color_third))
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f)
+                        .padding(16.dp)
+                ) {
+                    Text(
+                        text = coffeeMenuList?.menuName ?: "",
+                        style = MaterialTheme.typography.titleMedium,
+                        color = colorResource(R.color.color_secondary)
+                    )
+                    Text(
+                        text = coffeeMenuList?.menuDesc ?: "",
+                        style = MaterialTheme.typography.titleSmall,
+                        color = colorResource(R.color.color_third)
+                    )
+
+                }
+
+                renderButtonPrimary(
+                    onClickCallBack = {},
+                    buttonText = "Add Order",
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp)
+                )
+            }
         }
-
-        renderButtonPrimary(onClickCallBack = {}, buttonText = "Add Order", modifier = Modifier.fillMaxWidth())
     }
+
 
 }
 

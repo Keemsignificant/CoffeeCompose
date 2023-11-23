@@ -142,7 +142,7 @@ fun HomeFragment(
 
 }
 
-fun addItemMenu(coffeeListHandle: SnapshotStateList<CoffeeDTO>) {
+private fun addItemMenu(coffeeListHandle: SnapshotStateList<CoffeeDTO>) {
     val listAdd = listOf(
         CoffeeDTO(
             menuId = "10",
@@ -270,8 +270,6 @@ fun itemLoadingCoffeeList(
             if (isLastItem) {
                 onLoadMoreItemsCallback.invoke()
             }
-
-
             renderCardCondition(
                 isShowLoad = isLoading,
                 modifier = modifier,
