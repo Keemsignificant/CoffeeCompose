@@ -67,13 +67,6 @@ fun HomeFragment(
     homeViewModel: HomeViewModel = viewModel()
 ) {
 
-
-    fun launch() {
-        homeViewModel.getMenuCoffee()
-    }
-
-    launch()
-
     val coffeeMenuList = homeViewModel.menuCoffeeResult.observeAsState().value
 
     // this variable use to handle list state
@@ -428,6 +421,7 @@ fun Modifier.shimmerEffect(): Modifier = composed {
         )
     )
 
+    //0xFFE7E7ED
     background(
         brush = Brush.linearGradient(
             colors = listOf(

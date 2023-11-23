@@ -17,11 +17,15 @@ class SplashScreenViewModel : ViewModel() {
     var checkAppResult = MutableLiveData<List<AppStatus>>().apply { value = listOf() }
     var isShowDialogLoading = MutableLiveData<Boolean>().apply { value = true }//by remember { mutableStateOf(true) }
 
-    fun checkAppStatus() {
+    init {
+        checkAppStatus()
+    }
+    private fun checkAppStatus() {
         viewModelScope.launch {
             val result =  CoffeeRepositoryImpl().checkAppStatus()
             delay(1500)
             checkAppResult.value = result
         }
     }
+
 }

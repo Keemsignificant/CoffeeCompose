@@ -163,6 +163,7 @@ fun CustomAddItem(
                 painter = painterResource(id = R.drawable.baseline_restaurant_menu_24),
                 contentDescription = null,
                 /*modifier = Modifier.width(40.dp).height(40.dp),*/
+                tint = contentColor
             )
 
             Text(

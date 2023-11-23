@@ -39,12 +39,6 @@ fun SplashScreenFragment(
     viewModel: SplashScreenViewModel = viewModel(),
 ) {
 
-    fun launch() {
-        viewModel.checkAppStatus()
-    }
-
-    launch()
-
     val checkAppResult = viewModel.checkAppResult.observeAsState().value
     //var isShowDialogLoading by remember { mutableStateOf(true) }
 

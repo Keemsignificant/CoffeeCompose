@@ -11,7 +11,11 @@ class HomeViewModel: ViewModel() {
 
     var menuCoffeeResult = MutableLiveData<List<CoffeeDTO>>().apply { value = listOf() }
     var isLoadingItem = MutableLiveData<Boolean>().apply { value = true }
-    fun getMenuCoffee() {
+
+    init {
+        getMenuCoffee()
+    }
+    private fun getMenuCoffee() {
         viewModelScope.launch {
             val result =  CoffeeRepositoryImpl().getAllCoffee()
             menuCoffeeResult.value = result
