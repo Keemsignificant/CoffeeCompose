@@ -40,6 +40,7 @@ import com.chirayut.coffecompose.R
 import com.chirayut.coffecompose.detail.DetailFragment
 import com.chirayut.coffecompose.home.HomeFragment
 import com.chirayut.coffecompose.model.MenuBar
+import com.chirayut.coffecompose.process_history.ProcessFragment
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -187,6 +188,7 @@ fun MainBottomNavGraph(
             HomeFragment(navController)
         }
         composable(route = menuBar[1].menuRoute ?: "") {
+            ProcessFragment(navController = navController)
         }
         composable(route = menuBar[2].menuRoute ?: "") {
         }

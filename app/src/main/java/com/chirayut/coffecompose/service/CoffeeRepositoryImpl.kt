@@ -3,6 +3,7 @@ package com.chirayut.coffecompose.service
 import com.chirayut.coffecompose.model.AppStatus
 import com.chirayut.coffecompose.model.CoffeeDTO
 import com.chirayut.coffecompose.model.MenuBar
+import com.chirayut.coffecompose.model.ProcessHistory
 import kotlinx.coroutines.delay
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -105,6 +106,23 @@ class CoffeeRepositoryImpl : CoffeeRepository {
         } catch (exception: Exception) {
             val e = exception
             CoffeeDTO()
+        }
+    }
+
+    override suspend fun getProcessHistory(): List<ProcessHistory> {
+        return try {
+            val response = apiService.getProcess().awaitResponse()
+            if (response.isSuccessful) {
+                //val countries = response.body() ?: emptyList()
+                //countries.map { t.toModel() }
+                (response.body() ?: emptyList())
+            } else {
+                emptyList()
+            }
+
+        } catch (exception: Exception) {
+            val e = exception
+            emptyList()
         }
     }
 }
